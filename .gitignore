@@ -1,0 +1,19 @@
+node_modules/
+
+# Anchor build artifacts
+target/
+.anchor/
+
+# Solana keypairs
+**/*.json
+!Anchor.toml
+!package.json
+!tsconfig.json
+!tests/**/*.json
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
