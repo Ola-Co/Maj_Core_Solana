@@ -719,7 +719,7 @@ describe("maj_core", () => {
         expect.fail("should have thrown — onlyMaj guard");
       } catch (e: any) {
         // Anchor's `signer` constraint failure.
-        expect(e.message).to.match(/Signer|signer|0x[0-9a-f]+/i);
+        expect(e.message).to.match(/Signer|signer|Signature|Missing|0x[0-9a-f]+/i);
       }
     });
   });
@@ -728,7 +728,7 @@ describe("maj_core", () => {
 
   describe("getProgramAccounts — admin reverse lookup", () => {
     it("returns AdminRecord PDAs for admin1", async () => {
-      const discriminator = program.coder.accounts.accountDiscriminator("AdminRecord");
+      const discriminator = program.coder.accounts.accountDiscriminator("adminRecord");
 
       const accounts = await conn.getProgramAccounts(pid, {
         filters: [

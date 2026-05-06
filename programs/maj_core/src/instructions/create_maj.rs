@@ -84,7 +84,7 @@ pub fn handler<'info>(
         ctx.accounts
             .maj_instance
             .to_account_info()
-            .resize(new_space)?;;
+            .resize(new_space)?;
     }
 
     // ── Populate MajInstance ─────────────────────────────────────────────────
