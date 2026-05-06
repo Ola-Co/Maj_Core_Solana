@@ -56,7 +56,7 @@ pub struct SignTransaction<'info> {
 
 // ── Handler ──────────────────────────────────────────────────────────────────
 
-pub fn handler<'a>(ctx: Context<'a, 'a, 'a, 'a, SignTransaction<'a>>) -> Result<()> {
+pub fn handler<'info>(ctx: Context<'info, SignTransaction<'info>>) -> Result<()> {
     ctx.accounts.signature_record.bump = ctx.bumps.signature_record;
 
     let admin_key = ctx.accounts.admin.key();

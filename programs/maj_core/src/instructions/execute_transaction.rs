@@ -81,25 +81,25 @@ pub fn execute_transaction_logic<'info>(
             cpi_account_infos.push(info);
         }
 
-        let account_metas: Vec<solana_program::instruction::AccountMeta> = tx
+        let account_metas: Vec<anchor_lang::solana_program::instruction::AccountMeta> = tx
             .account_metas
             .iter()
-            .map(|m| solana_program::instruction::AccountMeta {
+            .map(|m| anchor_lang::solana_program::instruction::AccountMeta {
                 pubkey: m.pubkey,
                 is_signer: m.is_signer,
                 is_writable: m.is_writable,
             })
             .collect();
 
-        let instruction = solana_program::instruction::Instruction {
+        let instruction = anchor_lang::solana_program::instruction::Instruction {
             program_id: cpi_program_id,
             accounts: account_metas,
             data: tx.data.clone(),
         };
 
-        solana_program::program::invoke_signed(
+        anchor_lang::solana_program::program::invoke_signed(
             &instruction,
-            &cpi_account_infos,
+            &cpi_account_infos[..],
             &[seeds],
         )
         .map_err(|_| MajError::TransactionFailed)?;
@@ -160,7 +160,7 @@ pub struct ExecuteTransaction<'info> {
     // remaining_accounts: destination/CPI accounts (including maj_instance if governance CPI).
 }
 
-pub fn handler<'a>(ctx: Context<'a, 'a, 'a, 'a, ExecuteTransaction<'a>>) -> Result<()> {
+pub fn handler<'info>(ctx: Context<'info, ExecuteTransaction<'info>>) -> Result<()> {
     // Split borrows so both mutable references can coexist.
     let maj_instance = &mut ctx.accounts.maj_instance;
     let maj_transaction = &mut ctx.accounts.maj_transaction;

@@ -51,8 +51,8 @@ pub struct ProposeTransaction<'info> {
 
 // ── Handler ──────────────────────────────────────────────────────────────────
 
-pub fn handler<'a>(
-    ctx: Context<'a, 'a, 'a, 'a, ProposeTransaction<'a>>,
+pub fn handler<'info>(
+    ctx: Context<'info, ProposeTransaction<'info>>,
     to: Pubkey,
     value: u64,
     data: Vec<u8>,
@@ -137,7 +137,7 @@ pub fn handler<'a>(
 
         create_account(
             CpiContext::new_with_signer(
-                ctx.accounts.system_program.to_account_info(),
+                ctx.accounts.system_program.key(),
                 CreateAccount {
                     from: ctx.accounts.proposer.to_account_info(),
                     to: sig_record_info.clone(),

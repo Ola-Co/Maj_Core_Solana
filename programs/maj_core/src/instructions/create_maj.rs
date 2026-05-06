@@ -42,8 +42,8 @@ pub struct CreateMaj<'info> {
     // remaining_accounts: one AdminRecord PDA per admin in order.
 }
 
-pub fn handler<'a>(
-    ctx: Context<'a, 'a, 'a, 'a, CreateMaj<'a>>,
+pub fn handler<'info>(
+    ctx: Context<'info, CreateMaj<'info>>,
     name: String,
     admins: Vec<Pubkey>,
     sigs_required: u64,
@@ -84,7 +84,7 @@ pub fn handler<'a>(
         ctx.accounts
             .maj_instance
             .to_account_info()
-            .realloc(new_space, false)?;
+            .resize(new_space)?;;
     }
 
     // ── Populate MajInstance ─────────────────────────────────────────────────
@@ -126,7 +126,7 @@ pub fn handler<'a>(
 
         create_account(
             CpiContext::new_with_signer(
-                ctx.accounts.system_program.to_account_info(),
+                ctx.accounts.system_program.key(),
                 CreateAccount {
                     from: ctx.accounts.payer.to_account_info(),
                     to: admin_record_info.clone(),

@@ -66,7 +66,7 @@ pub fn add_admin_handler(ctx: Context<AddAdmin>, new_admin: Pubkey) -> Result<()
         ctx.accounts
             .maj_instance
             .to_account_info()
-            .realloc(new_space, false)?;
+            .resize(new_space)?;
     }
 
     ctx.accounts.maj_instance.admins.push(new_admin);

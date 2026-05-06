@@ -11,7 +11,7 @@ use state::SerializedAccountMeta;
 // Replace this placeholder with the real program ID after running:
 //   anchor build && anchor keys list
 // Then update Anchor.toml [programs.localnet] and [programs.devnet] as well.
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("AniZZs2U4KyhMkUTFJ7S8hQagrLLhZN2WbXDVLLJ7TRx");
 
 #[program]
 pub mod maj_core {
@@ -27,8 +27,8 @@ pub mod maj_core {
     /// Factory entry-point.  Creates a new named multisig instance and
     /// registers one AdminRecord PDA per initial admin (passed via
     /// `remaining_accounts`).
-    pub fn create_maj<'a>(
-        ctx: Context<'a, 'a, 'a, 'a, CreateMaj<'a>>,
+    pub fn create_maj<'info>(
+        ctx: Context<'info, CreateMaj<'info>>,
         name: String,
         admins: Vec<Pubkey>,
         sigs_required: u64,
@@ -39,8 +39,8 @@ pub mod maj_core {
     /// Propose a transaction.  Any non-blacklisted address may call this.
     /// If the proposer is an admin they auto-sign and auto-execute when the
     /// threshold is already met.
-    pub fn propose_transaction<'a>(
-        ctx: Context<'a, 'a, 'a, 'a, ProposeTransaction<'a>>,
+    pub fn propose_transaction<'info>(
+        ctx: Context<'info, ProposeTransaction<'info>>,
         to: Pubkey,
         value: u64,
         data: Vec<u8>,
@@ -52,13 +52,13 @@ pub mod maj_core {
 
     /// Admin signs an active transaction.  Auto-executes if the threshold is
     /// reached.
-    pub fn sign_transaction<'a>(ctx: Context<'a, 'a, 'a, 'a, SignTransaction<'a>>) -> Result<()> {
+    pub fn sign_transaction<'info>(ctx: Context<'info, SignTransaction<'info>>) -> Result<()> {
         instructions::sign_transaction::handler(ctx)
     }
 
     /// Manually execute a transaction that has already reached the threshold.
     /// All destination/CPI accounts must be supplied in `remaining_accounts`.
-    pub fn execute_transaction<'a>(ctx: Context<'a, 'a, 'a, 'a, ExecuteTransaction<'a>>) -> Result<()> {
+    pub fn execute_transaction<'info>(ctx: Context<'info, ExecuteTransaction<'info>>) -> Result<()> {
         instructions::execute_transaction::handler(ctx)
     }
 

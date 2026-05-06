@@ -1,18 +1,18 @@
 [toolchain]
-anchor_version = "0.30.1"
+anchor_version = "1.0.2"
 
 [features]
 seeds = true
 skip-lint = false
 
 [programs.localnet]
-maj_core = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+maj_core = "AniZZs2U4KyhMkUTFJ7S8hQagrLLhZN2WbXDVLLJ7TRx"
 
 [programs.devnet]
-maj_core = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+maj_core = "AniZZs2U4KyhMkUTFJ7S8hQagrLLhZN2WbXDVLLJ7TRx"
 
 [programs.mainnet]
-maj_core = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+maj_core = "AniZZs2U4KyhMkUTFJ7S8hQagrLLhZN2WbXDVLLJ7TRx"
 
 [registry]
 url = "https://api.apr.dev"
