@@ -1,0 +1,2068 @@
+{
+  "address": "AniZZs2U4KyhMkUTFJ7S8hQagrLLhZN2WbXDVLLJ7TRx",
+  "metadata": {
+    "name": "maj_core",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Maj multisig program for Solana — port of MajFactory.sol + Maj.sol"
+  },
+  "instructions": [
+    {
+      "name": "add_admin",
+      "docs": [
+        "Add a new admin to the multisig."
+      ],
+      "discriminator": [
+        177,
+        236,
+        33,
+        205,
+        124,
+        152,
+        55,
+        186
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "signer": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "new_admin"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_admin",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "add_blacklist",
+      "docs": [
+        "Blacklist an address so it cannot propose new transactions."
+      ],
+      "discriminator": [
+        217,
+        13,
+        249,
+        96,
+        5,
+        121,
+        73,
+        110
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "signer": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "blacklist_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  108,
+                  97,
+                  99,
+                  107,
+                  108,
+                  105,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "arg",
+                "path": "target"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "target",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "cancel_transaction",
+      "docs": [
+        "The original proposer cancels an active transaction.  Sets it inactive",
+        "without deleting the account (history is preserved)."
+      ],
+      "discriminator": [
+        65,
+        191,
+        19,
+        127,
+        230,
+        26,
+        214,
+        142
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "maj_transaction",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  116,
+                  120
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "account",
+                "path": "maj_transaction.tx_index",
+                "account": "MajTransaction"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_record",
+          "docs": [
+            "The proposer must be an admin to cancel."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "proposer"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "proposer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "change_sigs_required",
+      "docs": [
+        "Change the signature threshold (must remain within [2, admins.len()])."
+      ],
+      "discriminator": [
+        8,
+        249,
+        20,
+        80,
+        102,
+        23,
+        158,
+        61
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "signer": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_sigs_required",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "create_maj",
+      "docs": [
+        "Factory entry-point.  Creates a new named multisig instance and",
+        "registers one AdminRecord PDA per initial admin (passed via",
+        "`remaining_accounts`)."
+      ],
+      "discriminator": [
+        153,
+        41,
+        66,
+        61,
+        49,
+        122,
+        114,
+        22
+      ],
+      "accounts": [
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "name_record",
+          "docs": [
+            "Name reservation — init fails with \"already in use\" if the name is taken."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "maj_instance",
+          "docs": [
+            "The multisig wallet PDA — this account IS the SOL treasury."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "admins",
+          "type": {
+            "vec": "pubkey"
+          }
+        },
+        {
+          "name": "sigs_required",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "execute_transaction",
+      "docs": [
+        "Manually execute a transaction that has already reached the threshold.",
+        "All destination/CPI accounts must be supplied in `remaining_accounts`."
+      ],
+      "discriminator": [
+        231,
+        173,
+        49,
+        91,
+        235,
+        24,
+        68,
+        19
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "maj_transaction",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  116,
+                  120
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "account",
+                "path": "maj_transaction.tx_index",
+                "account": "MajTransaction"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_record",
+          "docs": [
+            "Verifies the caller is a registered admin of this instance."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_registry",
+      "docs": [
+        "Initialise the global registry singleton.  Must be called once before",
+        "any `create_maj` call.  Subsequent calls fail because the PDA already",
+        "exists (Anchor `init` constraint)."
+      ],
+      "discriminator": [
+        189,
+        181,
+        20,
+        17,
+        174,
+        57,
+        249,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "propose_transaction",
+      "docs": [
+        "Propose a transaction.  Any non-blacklisted address may call this.",
+        "If the proposer is an admin they auto-sign and auto-execute when the",
+        "threshold is already met."
+      ],
+      "discriminator": [
+        35,
+        204,
+        169,
+        240,
+        74,
+        70,
+        31,
+        236
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "maj_transaction",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  116,
+                  120
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.tx_count",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "proposer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "to",
+          "type": "pubkey"
+        },
+        {
+          "name": "value",
+          "type": "u64"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "program_id",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "account_metas",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "SerializedAccountMeta"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "remove_admin",
+      "docs": [
+        "Remove an existing admin (requires > 2 admins remain)."
+      ],
+      "discriminator": [
+        74,
+        202,
+        71,
+        106,
+        252,
+        31,
+        72,
+        183
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "signer": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "admin_to_remove"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_receiver",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "admin_to_remove",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "remove_blacklist",
+      "docs": [
+        "Remove an address from the blacklist."
+      ],
+      "discriminator": [
+        39,
+        82,
+        241,
+        133,
+        41,
+        2,
+        161,
+        21
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "signer": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "blacklist_record",
+          "docs": [
+            "If this PDA does not exist, Anchor's account resolution fails before",
+            "the handler runs — equivalent to `require!(isBlacklisted, NotBlacklisted)`."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  108,
+                  97,
+                  99,
+                  107,
+                  108,
+                  105,
+                  115,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "arg",
+                "path": "target"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_receiver",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "target",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "revoke_signature",
+      "docs": [
+        "Admin revokes their signature from an active transaction.  Closes the",
+        "SignatureRecord PDA and returns rent to the admin."
+      ],
+      "discriminator": [
+        15,
+        8,
+        51,
+        247,
+        178,
+        101,
+        114,
+        177
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "maj_transaction",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  116,
+                  120
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "account",
+                "path": "maj_transaction.tx_index",
+                "account": "MajTransaction"
+              }
+            ]
+          }
+        },
+        {
+          "name": "signature_record",
+          "docs": [
+            "Closing this PDA enforces the UserHasNotSigned guard:",
+            "if the PDA does not exist, Anchor's constraint resolution fails before",
+            "the handler runs."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_transaction"
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_record",
+          "docs": [
+            "Verifies the caller is a registered admin."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "sign_transaction",
+      "docs": [
+        "Admin signs an active transaction.  Auto-executes if the threshold is",
+        "reached."
+      ],
+      "discriminator": [
+        192,
+        35,
+        247,
+        2,
+        152,
+        115,
+        196,
+        110
+      ],
+      "accounts": [
+        {
+          "name": "maj_instance",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  105,
+                  110,
+                  115,
+                  116,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance.name",
+                "account": "MajInstance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "maj_transaction",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  106,
+                  95,
+                  116,
+                  120
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              },
+              {
+                "kind": "account",
+                "path": "maj_transaction.tx_index",
+                "account": "MajTransaction"
+              }
+            ]
+          }
+        },
+        {
+          "name": "signature_record",
+          "docs": [
+            "Creating this PDA atomically enforces the DuplicateSignature guard:",
+            "if the admin has already signed, the PDA exists and `init` fails."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maj_transaction"
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_record",
+          "docs": [
+            "Verifies the signer is a registered admin of this instance."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              },
+              {
+                "kind": "account",
+                "path": "maj_instance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "AdminRecord",
+      "discriminator": [
+        233,
+        189,
+        144,
+        36,
+        255,
+        53,
+        107,
+        156
+      ]
+    },
+    {
+      "name": "BlacklistRecord",
+      "discriminator": [
+        90,
+        168,
+        172,
+        91,
+        227,
+        71,
+        106,
+        156
+      ]
+    },
+    {
+      "name": "MajInstance",
+      "discriminator": [
+        36,
+        236,
+        138,
+        248,
+        124,
+        103,
+        84,
+        222
+      ]
+    },
+    {
+      "name": "MajNameRecord",
+      "discriminator": [
+        81,
+        255,
+        88,
+        125,
+        191,
+        88,
+        103,
+        150
+      ]
+    },
+    {
+      "name": "MajRegistry",
+      "discriminator": [
+        134,
+        89,
+        64,
+        180,
+        64,
+        12,
+        6,
+        93
+      ]
+    },
+    {
+      "name": "MajTransaction",
+      "discriminator": [
+        235,
+        238,
+        29,
+        125,
+        118,
+        220,
+        228,
+        149
+      ]
+    },
+    {
+      "name": "SignatureRecord",
+      "discriminator": [
+        131,
+        228,
+        158,
+        203,
+        39,
+        52,
+        166,
+        51
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AdminAdded",
+      "discriminator": [
+        23,
+        13,
+        37,
+        90,
+        130,
+        53,
+        75,
+        251
+      ]
+    },
+    {
+      "name": "AdminRemoved",
+      "discriminator": [
+        59,
+        133,
+        36,
+        27,
+        156,
+        79,
+        75,
+        146
+      ]
+    },
+    {
+      "name": "AdminStatusUpdated",
+      "discriminator": [
+        150,
+        30,
+        166,
+        61,
+        25,
+        52,
+        233,
+        208
+      ]
+    },
+    {
+      "name": "MajDeployed",
+      "discriminator": [
+        181,
+        251,
+        120,
+        218,
+        36,
+        190,
+        32,
+        64
+      ]
+    },
+    {
+      "name": "SignatureRevoked",
+      "discriminator": [
+        77,
+        171,
+        167,
+        91,
+        193,
+        100,
+        178,
+        1
+      ]
+    },
+    {
+      "name": "SignaturesRequiredChanged",
+      "discriminator": [
+        205,
+        139,
+        247,
+        237,
+        142,
+        161,
+        188,
+        123
+      ]
+    },
+    {
+      "name": "TransactionCancelled",
+      "discriminator": [
+        155,
+        195,
+        244,
+        213,
+        34,
+        85,
+        190,
+        6
+      ]
+    },
+    {
+      "name": "TransactionExecuted",
+      "discriminator": [
+        211,
+        227,
+        168,
+        14,
+        32,
+        111,
+        189,
+        210
+      ]
+    },
+    {
+      "name": "TransactionProposed",
+      "discriminator": [
+        101,
+        172,
+        18,
+        160,
+        76,
+        105,
+        205,
+        171
+      ]
+    },
+    {
+      "name": "TransactionSigned",
+      "discriminator": [
+        88,
+        44,
+        7,
+        176,
+        136,
+        165,
+        150,
+        24
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "DuplicateAdminAddress",
+      "msg": "Duplicate admin address"
+    },
+    {
+      "code": 6001,
+      "name": "ZeroAddress",
+      "msg": "Zero address not allowed"
+    },
+    {
+      "code": 6002,
+      "name": "TooManySignaturesRequired",
+      "msg": "Too many signatures required"
+    },
+    {
+      "code": 6003,
+      "name": "TooFewSignaturesRequired",
+      "msg": "Too few signatures required (minimum 2)"
+    },
+    {
+      "code": 6004,
+      "name": "OnlyAdmin",
+      "msg": "Caller is not an admin"
+    },
+    {
+      "code": 6005,
+      "name": "TransactionNotActive",
+      "msg": "Transaction is not active"
+    },
+    {
+      "code": 6006,
+      "name": "DuplicateSignature",
+      "msg": "Admin has already signed this transaction"
+    },
+    {
+      "code": 6007,
+      "name": "InsufficientSignatures",
+      "msg": "Insufficient signatures to execute"
+    },
+    {
+      "code": 6008,
+      "name": "TransactionFailed",
+      "msg": "CPI call failed"
+    },
+    {
+      "code": 6009,
+      "name": "UserHasNotSigned",
+      "msg": "Admin has not signed this transaction"
+    },
+    {
+      "code": 6010,
+      "name": "OnlyProposerCanCancel",
+      "msg": "Only the proposer can cancel this transaction"
+    },
+    {
+      "code": 6011,
+      "name": "OnlyMaj",
+      "msg": "Instruction must be called via multisig execution (onlyMaj)"
+    },
+    {
+      "code": 6012,
+      "name": "AddressIsNotAdmin",
+      "msg": "Address is not an admin"
+    },
+    {
+      "code": 6013,
+      "name": "TwoAdminMinimum",
+      "msg": "Minimum two admins required"
+    },
+    {
+      "code": 6014,
+      "name": "NameTaken",
+      "msg": "A Maj with this name already exists"
+    },
+    {
+      "code": 6015,
+      "name": "NameNotFound",
+      "msg": "No Maj found with this name"
+    },
+    {
+      "code": 6016,
+      "name": "NotBlacklisted",
+      "msg": "Address is not blacklisted"
+    },
+    {
+      "code": 6017,
+      "name": "AddressIsBlacklisted",
+      "msg": "Address is blacklisted"
+    },
+    {
+      "code": 6018,
+      "name": "NameTooLong",
+      "msg": "Name exceeds maximum length (64 chars)"
+    }
+  ],
+  "types": [
+    {
+      "name": "AdminAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_admin",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminRecord",
+      "docs": [
+        "Records that `admin` is a member of `maj_instance`.",
+        "Seeds: [b\"admin_record\", admin.as_ref(), maj_instance.as_ref()]",
+        "",
+        "Existence of this PDA is the O(1) membership check used by instruction",
+        "account constraints.  It also enables efficient off-chain reverse lookups",
+        "via getProgramAccounts with a memcmp filter at offset 8."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "docs": [
+              "Offset 8..40 — filter target for getProgramAccounts queries."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "maj_instance",
+            "docs": [
+              "Offset 40..72 — secondary filter target."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminRemoved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "admin_removed",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminStatusUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "status",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BlacklistRecord",
+      "docs": [
+        "Records that `target` is blacklisted from proposing transactions.",
+        "Seeds: [b\"blacklist\", maj_instance.as_ref(), target.as_ref()]",
+        "Existence = blacklisted; closed on remove."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MajDeployed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "admins",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "sigs_required",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MajInstance",
+      "docs": [
+        "The core multisig wallet PDA.  Each unique Maj instance is identified",
+        "by its human-readable name.  This account IS the treasury — it holds SOL."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "docs": [
+              "Human-readable identifier (max 64 UTF-8 bytes)."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "admins",
+            "docs": [
+              "Ordered list of admin pubkeys (kept in sync with AdminRecord PDAs)."
+            ],
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "sigs_required",
+            "docs": [
+              "Minimum signatures needed to execute a transaction (always >= 2)."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "tx_count",
+            "docs": [
+              "Monotonically-increasing counter used as the MajTransaction PDA seed."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "Canonical bump for the PDA derived from [b\"maj_instance\", name.as_bytes()]."
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MajNameRecord",
+      "docs": [
+        "Reserves a name so no two instances share the same identifier.",
+        "Seeds: [b\"maj_name\", name.as_bytes()]"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MajRegistry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_instances",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MajTransaction",
+      "docs": [
+        "A proposed (and potentially executed) multisig transaction.",
+        "Seeds: [b\"maj_tx\", maj_instance.as_ref(), tx_index.to_le_bytes()]",
+        "",
+        "The account is initialised with minimum space; data/account_metas are",
+        "Borsh-variable so the account is realloced if the proposal carries a",
+        "non-empty payload."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "tx_index",
+            "type": "u64"
+          },
+          {
+            "name": "to",
+            "docs": [
+              "Destination pubkey.  For SOL transfers this is the recipient; for",
+              "CPI calls it mirrors the program_id field."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "value",
+            "docs": [
+              "Lamports to transfer (0 for pure CPI calls)."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "proposed_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "active",
+            "type": "bool"
+          },
+          {
+            "name": "executed",
+            "type": "bool"
+          },
+          {
+            "name": "num_signatures",
+            "docs": [
+              "u32 (not u8) so large admin sets can all sign."
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "program_id",
+            "docs": [
+              "None = SOL transfer; Some(pid) = CPI call to pid."
+            ],
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "data",
+            "docs": [
+              "Borsh-encoded instruction data for CPI calls (empty for SOL transfer)."
+            ],
+            "type": "bytes"
+          },
+          {
+            "name": "account_metas",
+            "docs": [
+              "Ordered accounts for the CPI call."
+            ],
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "SerializedAccountMeta"
+                }
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SerializedAccountMeta",
+      "docs": [
+        "A compact, borsh-serializable representation of an account meta entry",
+        "used when encoding CPI payloads inside a MajTransaction."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_signer",
+            "type": "bool"
+          },
+          {
+            "name": "is_writable",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SignatureRecord",
+      "docs": [
+        "Existence of this PDA means `signer` has approved `maj_tx`.",
+        "Seeds: [b\"sig\", maj_tx.as_ref(), signer.as_ref()]",
+        "Created by sign_transaction; closed (rent returned) by revoke_signature."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SignatureRevoked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tx_index",
+            "type": "u64"
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "num_signatures",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SignaturesRequiredChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maj_instance",
+            "type": "pubkey"
+          },
+          {
+            "name": "signatures_required",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransactionCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tx_index",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransactionExecuted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tx_index",
+            "type": "u64"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "value",
+            "type": "u64"
+          },
+          {
+            "name": "data",
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransactionProposed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tx_index",
+            "type": "u64"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "value",
+            "type": "u64"
+          },
+          {
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "name": "proposed_by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransactionSigned",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tx_index",
+            "type": "u64"
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "num_signatures",
+            "type": "u32"
+          }
+        ]
+      }
+    }
+  ]
+}
