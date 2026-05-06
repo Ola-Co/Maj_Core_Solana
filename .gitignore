@@ -1,7 +1,8 @@
 node_modules/
 
 # Anchor build artifacts
-target/
+target/*
+!target/idl/maj_core.json
 .anchor/
 
 # Solana keypairs
